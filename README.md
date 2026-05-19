@@ -2,8 +2,6 @@
 
 Centauri is a high-tech digital infrastructure and AI guidance platform designed for the next generation of technology talent in the UK. It bridges the gap between ambition and access by providing a network of physical "Hub Points" and digital mentorship.
 
-![App Preview](https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop)
-
 ## 🌌 The Vision
 
 Centauri provides the "hardware and headspace" required for modern engineering. Through our **Centauri Points** network, users can access high-spec laptops and 5G connectivity hubs at local libraries and community centers, coordinated through a tactical, real-time dashboard.
