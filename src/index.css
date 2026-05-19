@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --radius-centauri: 24px;
+  
+  --color-charleston-green: #2A2829;
+  --color-alabaster: #F0EBE5;
+  --color-centauri-primary: #2A2829;
+  --color-centauri-accent: #6366F1;
+  --color-centauri-soft: #F0EBE5;
+  --color-centauri-glass: rgba(42, 40, 41, 0.7);
+}
+
+body {
+  @apply antialiased bg-charleston-green text-alabaster selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden;
+}
+
+/* Dark mode support logic - setting it to the same palette for consistency as requested */
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-charleston-green text-alabaster;
+  }
+}
+
+.glass {
+  @apply backdrop-blur-xl bg-charleston-green/70 border border-white/10 shadow-sm;
+}
+
+.dark .glass {
+  @apply bg-black/40 border-white/10;
+}
+
+.card-centauri {
+  @apply rounded-[24px] border border-white/5 bg-white/5 p-6 transition-all duration-300 hover:shadow-xl hover:shadow-black/20 hover:-translate-y-1;
+}
+
+.dark .card-centauri {
+  @apply bg-black/20 border-white/5 hover:shadow-white/5;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full;
+}
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-white/20;
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.markdown-body {
+  @apply space-y-4;
+}
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+  @apply font-bold tracking-tight text-white mb-2 mt-4;
+}
+.markdown-body h1 { @apply text-2xl; }
+.markdown-body h2 { @apply text-xl; }
+.markdown-body h3 { @apply text-lg; }
+.markdown-body p { @apply mb-2 last:mb-0; }
+.markdown-body ul, .markdown-body ol { @apply ml-6 list-outside mb-2; }
+.markdown-body ul { @apply list-disc; }
+.markdown-body ol { @apply list-decimal; }
+.markdown-body li { @apply mb-1; }
+.markdown-body strong { @apply text-white font-bold; }
+.markdown-body code { @apply px-1.5 py-0.5 bg-white/10 rounded font-mono text-xs; }
+.markdown-body hr { @apply border-white/10 my-6; }

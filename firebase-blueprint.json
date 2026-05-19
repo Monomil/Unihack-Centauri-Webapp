@@ -1,0 +1,136 @@
+{
+  "entities": {
+    "CentauriPoint": {
+      "title": "Centauri Point",
+      "description": "Hardware loan hub including slot occupancy.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "location_name": { "type": "string" },
+        "total_slots": { "type": "integer" },
+        "occupied_slots": { "type": "integer" },
+        "gps_coords": { "type": "object" }
+      },
+      "required": ["id", "location_name", "total_slots", "occupied_slots"]
+    },
+    "User": {
+      "title": "User Profile",
+      "description": "Identity and eligibility data for participants.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "isFSM": { "type": "boolean", "description": "Free School Meals status" },
+        "isStateSchool": { "type": "boolean" },
+        "isUnemployed": { "type": "boolean" },
+        "eligibilityScore": { "type": "integer" },
+        "priorityLevel": { "type": "integer" },
+        "streak": { "type": "integer" },
+        "careerPassport": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "fullName"]
+    },
+    "Locker": {
+      "title": "Smart Locker",
+      "description": "Hardware loan locker status.",
+      "type": "object",
+      "properties": {
+        "lockerId": { "type": "string" },
+        "location": { "type": "string" },
+        "totalCapacity": { "type": "integer" },
+        "reservedCount": { "type": "integer" },
+        "status": { "type": "string", "enum": ["AVAILABLE", "LOW_STOCK", "OUT_OF_STOCK"] }
+      }
+    },
+    "Laptop": {
+      "title": "Laptop Asset",
+      "description": "Tracking for hardware lifecycle.",
+      "type": "object",
+      "properties": {
+        "assetTag": { "type": "string" },
+        "lastHealthCheck": { "type": "string", "format": "date-time" },
+        "status": { "type": "string" },
+        "assignedTo": { "type": "string" }
+      }
+    },
+    "Session": {
+      "title": "Mentoring Session",
+      "description": "Logged meeting with mentor signature.",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "userId": { "type": "string" },
+        "mentorId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "mentorSignature": { "type": "string" },
+        "skillsCovered": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "Booking": {
+      "title": "Appointment Booking",
+      "description": "A scheduled session between a user and a mentor.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "mentorName": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "platform": { "type": "string" },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "date", "time", "userId"]
+    },
+    "MentorApplication": {
+      "title": "Mentor Application",
+      "description": "Application from a professional to become a mentor.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "company": { "type": "string" },
+        "specialization": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED"] },
+        "userId": { "type": "string" },
+        "cvUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fullName", "email", "role", "company", "specialization"]
+    }
+  },
+  "firestore": {
+    "/centauri_points/{pointId}": {
+      "schema": "CentauriPoint",
+      "description": "Hardware loan hub tracking."
+    },
+    "/mentor_applications/{applicationId}": {
+      "schema": "MentorApplication",
+      "description": "Applications for mentorship roles."
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Participant data."
+    },
+    "/users/{userId}/bookings/{bookingId}": {
+      "schema": "Booking",
+      "description": "User specific bookings."
+    },
+    "/lockers/{lockerId}": {
+      "schema": "Locker",
+      "description": "Locker capacity tracking."
+    },
+    "/laptops/{assetTag}": {
+      "schema": "Laptop",
+      "description": "Hardware lifecycle."
+    },
+    "/sessions/{sessionId}": {
+      "schema": "Session",
+      "description": "Verified session logs."
+    }
+  }
+}

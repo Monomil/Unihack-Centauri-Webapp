@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 0. Catch-all Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // --- Validation Blueprints ---
+    
+    function isValidUser(data) {
+      return data.uid is string && data.uid == request.auth.uid &&
+             data.fullName is string && data.fullName.size() <= 100 &&
+             data.isFSM is bool &&
+             data.isStateSchool is bool &&
+             data.isUnemployed is bool &&
+             data.updatedAt == request.time;
+    }
+
+    // --- Match Rules ---
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isSignedIn() && isValidUser(incoming()) && userId == request.auth.uid;
+      allow update: if isOwner(userId) && isValidUser(incoming()) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['fullName', 'isFSM', 'isStateSchool', 'isUnemployed', 'updatedAt']);
+    }
+
+    match /lockers/{lockerId} {
+      allow read: if isSignedIn();
+      // Only system can write to lockers in production, but for demo we allow logic checks
+      allow update: if isSignedIn() && 
+        incoming().reservedCount <= incoming().totalCapacity &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['reservedCount', 'status']);
+    }
+
+    match /laptops/{assetTag} {
+      allow read: if isSignedIn() && (existing().assignedTo == request.auth.uid);
+      // Admin only write
+    }
+
+    match /sessions/{sessionId} {
+      allow read: if isSignedIn() && (existing().userId == request.auth.uid);
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid && incoming().timestamp == request.time;
+    }
+  }
+}

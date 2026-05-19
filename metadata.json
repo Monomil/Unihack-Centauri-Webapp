@@ -1,0 +1,6 @@
+{
+  "name": "Centauri: Access. Confidence. Connection.",
+  "description": "An AI-powered youth digital inclusion platform for the UK, helping underserved young people access technology, mentorship, and tech careers.",
+  "requestFramePermissions": ["camera", "geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
